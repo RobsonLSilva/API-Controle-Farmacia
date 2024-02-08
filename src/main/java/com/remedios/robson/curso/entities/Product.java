@@ -4,48 +4,33 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.remedios.robson.curso.entities.enums.Laboratory;
 import com.remedios.robson.curso.entities.enums.Way;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.Objects;
 
-@Entity
-@Getter
-@NoArgsConstructor // JPA Only Adiciona um construtor vazio.
+
+@Entity(name = "Product")
 @Table(name = "tb_product")
 public class Product implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    @Setter
-    @Getter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-
-    @Setter
-    @Getter
+    private Long id;
     private String description;
-
-    @Setter
-    @Getter
+    private Integer way;
     private String lote;
-
-    @Setter
-    @Getter
     private Integer quantity;
-
-    @Setter
-    @Getter
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
     private Instant validity;
-
-    private Integer way;
-
     private Integer laboratory;
+
+    public Product(){
+
+    }
 
     public Product(Long id, String description, Way way, String lote, Integer quantity, Instant validity, Laboratory laboratory) {
         this.id = id;
@@ -57,14 +42,44 @@ public class Product implements Serializable {
         setLaboratory(laboratory);
     }
 
-    public Product(String description, Way way, String lote, Integer quantity, Instant validity, Laboratory laboratory) {
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
         this.description = description;
-        setWay(way);
+    }
+
+    public String getLote() {
+        return lote;
+    }
+
+    public void setLote(String lote) {
         this.lote = lote;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
         this.quantity = quantity;
+    }
+
+    public Instant getValidity() {
+        return validity;
+    }
+
+    public void setValidity(Instant validity) {
         this.validity = validity;
-        setLaboratory(laboratory);
     }
 
     public Way getWay() {
@@ -94,12 +109,12 @@ public class Product implements Serializable {
 
         Product product = (Product) o;
 
-        return id == product.id;
+        return Objects.equals(id, product.id);
     }
 
     @Override
     public int hashCode() {
-        return (int) (id ^ (id >>> 32));
+        return id != null ? id.hashCode() : 0;
     }
 
     @Override
@@ -107,10 +122,10 @@ public class Product implements Serializable {
         return "Product{" +
                 "id=" + id +
                 ", description='" + description + '\'' +
+                ", way=" + way +
                 ", lote='" + lote + '\'' +
                 ", quantity=" + quantity +
                 ", validity=" + validity +
-                ", way=" + way +
                 ", laboratory=" + laboratory +
                 '}';
     }
